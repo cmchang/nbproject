@@ -359,9 +359,6 @@
 					"</div>"+
 					"<div id='docview_scrollbar_thumb'/></div>"+
 					"<div id='docview_controls'>"+
-						// "<button id='docview_button_sb'/>"+
-						// "<button id='docview_button_play'/>"+
-						// "<button id='docview_button_sf'/>"+
 					"</div>";
 		$("div.contents", self.element).html(contents);
 		//calculate correct width of progress bar
@@ -404,6 +401,15 @@
 				self._player.seekTo(0);
 			}				
 		});
+		$(".muteORunmute").click(function(evt){
+			if ($(".muteORunmute").attr("src") == "http://web.mit.edu/changc/www/videoAnnotation/images/volume_up.png"){
+				$(".muteORunmute").attr("src", "http://web.mit.edu/changc/www/videoAnnotation/images/mute.png")
+				self._player.mute();
+			}else{
+				$(".muteORunmute").attr("src", "http://web.mit.edu/changc/www/videoAnnotation/images/volume_up.png")
+				self._player.unMute();
+			}
+		})
 		var $material = $("div.material", self.element).click(function(evt){
 			var numpage = evt.currentTarget.getAttribute("page");
 			$.concierge.trigger({type: "page", value:numpage});
