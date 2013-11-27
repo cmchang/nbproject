@@ -134,7 +134,13 @@
 		case "drawable_start": 
 		self._player.pauseVideo();
 		self._page = Math.floor(self.SEC_MULT_FACTOR*self._player.getCurrentTime());
+		//create temporary "rangeTick" once drawable is created
+		// TODO: still a little buggy with progressbar filler lag
 		$("#docview_drawingarea").attr("page", self._page);
+		$("#rangeTick").css({"display": "block"});
+		var tickLoc = self._player.getCurrentTime()/self._player.getDuration()*$("#progressbar").width();
+		$("#rangeTick").css({"left": tickLoc});
+
 		break;
 		case "editor_saving": 
 		self._player.playVideo();
@@ -415,7 +421,7 @@
 			var currentSec = percentage*self._player.getDuration();
 
 			//updates ytplayer location in video
-			self._player.seekTo(currentSec); 
+			self._player.seekTo(currentSec);  //Todo: bug I think because the corresponding highlighted comment isn't updated
 		})
 		var $material = $("div.material", self.element).click(function(evt){
 			var numpage = evt.currentTarget.getAttribute("page");
