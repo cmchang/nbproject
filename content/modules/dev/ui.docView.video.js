@@ -363,7 +363,7 @@
 					"</div>";
 		$("div.contents", self.element).html(contents);
 		//calculate correct width of progress bar
-		var pbWidth = $(".videoMenu").width() - ($(".playORpause").width() + $(".playback").width() + $(".muteORunmute").width()) - 20;
+		var pbWidth = $(".videoMenu").width() - ($(".playORpause_holder").width() + $(".playback").width() + $(".muteORunmute_holder").width()) - 10;
 		$(".progressbar_container").css({"width": pbWidth});
 		$("#dragRangeContainer").css({"width": pbWidth});
 		$(".tickmark_holder").css({"width": pbWidth});
