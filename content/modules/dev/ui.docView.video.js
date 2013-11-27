@@ -228,7 +228,7 @@
 			
 			var createTicks = function(payload){
 				var newNoteObj; 
-				console.log("here");
+				//console.log("here");
 				for (var id in payload.diff){
 					newNoteObj = payload.diff[id];
 					//console.log("newNoteObj: ", newNoteObj);
@@ -364,6 +364,12 @@
 						"<button id='docview_button_sf'/>"+
 					"</div>";
 		$("div.contents", self.element).html(contents);
+		//calculate correct width of progress bar
+		var pbWidth = $(".videoMenu").width() - ($(".playORpause").width() + $(".playback").width() + $(".muteORunmute").width()) - 20;
+		console.log("pbWidth = " + pbWidth);
+		$(".progressbar_container").css({"width": pbWidth});
+		$("#dragRangeContainer").css({"width": pbWidth});
+		$(".tickmark_holder").css({"width": pbWidth});
 		var drag_helper = function($thumb, pos, make_new_req){
 			var duration = self._player.getDuration();
 			var thumbstyle = getComputedStyle($thumb[0]);

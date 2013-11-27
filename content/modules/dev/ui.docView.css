@@ -36,8 +36,8 @@ License:  Copyright (c) 2010-2012 Massachusetts Institute of Technology.
 }
 
 .progressbar_container, #dragRangeContainer, .tickmark_holder{
-    width: 80%; 
-    /*need to change*/
+    /*width: 80%; */
+    /*width controlled in js*/
 }
     
 
