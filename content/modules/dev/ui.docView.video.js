@@ -354,13 +354,11 @@
 					"</div>"+
 
 
-					"<div id='docview_scrollbar'>"+
-						"<div id='docview_scrollbar_list'>"+
-							"<div id='docview_scrollbar_tickholder'></div>"+
+					"<div id='docview_scrollbar' style = 'display:none'>"+
+						"<div id='docview_scrollbar_list' style = 'display:none'>"+
+							"<div id='docview_scrollbar_tickholder' style = 'display:none'></div>"+
 					"</div>"+
-					"<div id='docview_scrollbar_thumb'/></div>"+
-					"<div id='docview_controls'>"+
-					"</div>";
+					"<div id='docview_scrollbar_thumb' style = 'display:none'/></div>";
 		$("div.contents", self.element).html(contents);
 		//calculate correct width of progress bar
 		var pbWidth = $(".videoMenu").width() - ($(".playORpause_holder").width() + $(".playback").width() + $(".muteORunmute_holder").width()) - 10;
@@ -420,7 +418,7 @@
 				if (numpage !== self._page){
 				$.concierge.trigger({type: "page_peek", value:numpage});
 				}
-			});
+		});
 		self._v_margin = parseInt($material.css("margin-bottom"), 10) + parseInt($material.css("margin-top"), 10 );
 		self._player = new YT.Player('youtube_player', {
 				height: ""+self._h,
@@ -452,7 +450,20 @@
 					}
 				}
 			}
-			});
+		});
+		/*
+		 * 12. Keyboard Shortcuts
+		 */
+		$(window).keyup(function(e) {
+			
+			if(e.which == 32){ //spacebar
+				$(".playORpause").trigger("click");
+			}else if(e.which === 77){ // m
+				$(".muteORunmute").trigger("click");
+			}
+
+
+		});
 		},
 		_render: function(){
 		/*
