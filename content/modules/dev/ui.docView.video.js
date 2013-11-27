@@ -409,6 +409,14 @@
 				self._player.unMute();
 			}
 		})
+		$("#progressbar").click(function(evt){
+			var percentage = evt.offsetX/$("#progressbar").width();  
+			$("#progressbar_filler").css("width", percentage*100 + "%"); //updates progressbar location
+			var currentSec = percentage*self._player.getDuration();
+
+			//updates ytplayer location in video
+			self._player.seekTo(currentSec); 
+		})
 		var $material = $("div.material", self.element).click(function(evt){
 			var numpage = evt.currentTarget.getAttribute("page");
 			$.concierge.trigger({type: "page", value:numpage});
