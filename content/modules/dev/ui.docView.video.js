@@ -118,10 +118,12 @@
 			self._player.seekTo(self._page/self.SEC_MULT_FACTOR);
 		}
 		self._render();
-		$thumb = $("#docview_scrollbar_thumb");
+		// $thumb = $("#docview_scrollbar_thumb");
+		$thumb = $("#progressbar_filler");
 		thumbstyle = getComputedStyle($thumb[0]);
 		total_w = $thumb.parent().width() - $thumb.width() - ((parseInt(thumbstyle.getPropertyValue('border-left-width'), 10) || 0) + (parseInt(thumbstyle.getPropertyValue('border-right-width'), 10) || 0) + (parseInt(thumbstyle.getPropertyValue('margin-left-width'), 10) || 0) + (parseInt(thumbstyle.getPropertyValue('margin-right-width'), 10) || 0)); 
-		$thumb.css({left: total_w*self._page/(self._player.getDuration()*self.SEC_MULT_FACTOR)+"px"});
+		$("#docview_scrollbar_thumb").css({left: total_w*self._page/(self._player.getDuration()*self.SEC_MULT_FACTOR)+"px"});
+		$("#progressbar_filler").css({width: total_w*self._page/(self._player.getDuration()*self.SEC_MULT_FACTOR)+"px"});
 		break;
 		case "doc_scroll_down": 
 		$.L("[docView11] TODO: doc_scroll_down");		
@@ -240,6 +242,7 @@
 					//var self = this;
 					var duration = self._player.getDuration()*100;
 					var thumbPlace = total_w*newNoteObj.page/duration+"px";
+					console.log("duration = "+ duration+ ", newNoteObj.page= "+newNoteObj.page+", thumbplace = " + thumbPlace)
 					//copy the htmlText - stores the current tick mark divs (if any)
 					var htmlText = $("#docview_scrollbar_tickholder").html();
 					//clear the content in the tickholder div
@@ -352,8 +355,6 @@
 
 
 					"<div id='docview_scrollbar'>"+
-						"<span/ id='docview_scrollbar_elapsed'>0:00</span>"+
-						"<span/ id='docview_scrollbar_total'>?:??</span>"+
 						"<div id='docview_scrollbar_list'>"+
 							"<div id='docview_scrollbar_tickholder'></div>"+
 					"</div>"+
@@ -372,11 +373,11 @@
 			var total_w = $thumb.parent().width() - $thumb.width() - ((parseInt(thumbstyle.getPropertyValue('border-left-width'), 10) || 0) + (parseInt(thumbstyle.getPropertyValue('border-right-width'), 10) || 0) + (parseInt(thumbstyle.getPropertyValue('margin-left-width'), 10) || 0) + (parseInt(thumbstyle.getPropertyValue('margin-right-width'), 10) || 0)); 
 			self._player.seekTo(duration * (pos+0.0) / total_w, make_new_req);
 		};
-		$("#docview_scrollbar_thumb").draggable({axis: "x",
-							 containment: "parent", 
-							 stop: function(evt, ui) { drag_helper(ui.helper, ui.position.left, true);}, 
-							 drag: function(evt, ui) { drag_helper(ui.helper, ui.position.left, false);}
-			});
+		// $("#docview_scrollbar_thumb").draggable({axis: "x",
+		// 					 containment: "parent", 
+		// 					 stop: function(evt, ui) { drag_helper(ui.helper, ui.position.left, true);}, 
+		// 					 drag: function(evt, ui) { drag_helper(ui.helper, ui.position.left, false);}
+		// 	});
 		$("#docview_drawingarea").drawable({model: model});
 		// called when the play/pause button is clicked
 		// syncs the correct image with the action
