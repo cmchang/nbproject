@@ -3,6 +3,128 @@ Author: cf AUTHORS.txt
 License:  Copyright (c) 2010-2012 Massachusetts Institute of Technology.
           MIT License (cf. MIT-LICENSE.txt or http://www.opensource.org/licenses/mit-license.php)
 */
+
+.videoMenu{
+    margin-top: -20px;
+    max-width: 100%;
+    padding: 5px;
+    padding-left: 10px;
+    padding-bottom: 15px;
+    height:50px;
+    /*background: #E6E6E6;*/
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    background-color: #fafafa;
+    background-image: linear-gradient(to bottom, #f9f9f9, #d3d1d1);
+}
+
+.playORpause_holder, .playback, .progressbar_container, .muteORunmute_holder{
+    display:inline-block;
+}
+.playORpause_holder, .muteORunmute_holder, .playback{
+    width: 35px;
+}
+.playORpause:hover, .muteORunmute:hover, .playback:hover{
+    opacity: 1;
+}
+.playORpause, .muteORunmute, .playback{
+    opacity: .5;
+}
+
+.muteORunmute_holder{
+    margin-left: 4px;
+}
+
+.progressbar_container, #dragRangeContainer, .tickmark_holder{
+    width: 80%; 
+    /*need to change*/
+}
+    
+
+.progressbar_container{
+    position:relative;
+    height: 10px;
+    top: 8px;
+    margin-bottom: 25px;
+    border-bottom-right-radius: 0px;
+    border-bottom-left-radius: 0px;
+}
+
+#progressbar{
+    position: relative;
+    width:100%; 
+    height: 15px;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+    opacity: .7;
+    border: solid 1px #B5AF9F;
+    border-bottom: none;
+
+}
+
+#progressbar_filler{
+    position: relative;
+    width: 0%;
+    max-width: 100%;
+    height: 100%;
+    background: #D1D1D1;
+    border-right: solid 1px #B5AF9F;
+}
+#dragRangeContainer{
+    position: absolute;
+    height:16px;
+    background: white;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+    top: 0px;
+    border: solid 1px #B5AF9F;
+    border-bottom: none;
+
+}
+#rangeTick{
+    position: relative;
+    height: 100%;
+    display: none;
+    width: 2px;
+    background: red;
+}
+#zoomTick{
+    position: absolute;
+    height: 8px;
+    display: none;
+    width: 2px;
+    background-color: rgba(0, 0, 255, 0.3);
+    z-index: 1;
+}
+.tickmark_holder{
+    position: relative;
+    height: 8px;
+    margin-bottom: 6px;
+    background: white;
+    border: solid 1px #B5AF9F;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+
+}
+
+.tickmark{
+    position: absolute;
+    height: 100%;
+    background: red;
+    opacity: .4;
+}
+
+#showTime{
+    margin-top: -5px;
+    text-align: right;  
+    height: 100%;
+}
+
+#videoTimeDisplay, #videoTotalTimeDisplay{
+    display: inline-block;
+}
+
+/*---------------------------------------------------------*/
 div.docView{
 	overflow-y: auto;
 	background-color: #E6E6E6 !important;
