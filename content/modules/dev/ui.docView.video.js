@@ -327,8 +327,8 @@
 
 					//videoMenu from prototype, currently merging
 					"<div class = 'videoMenu'>"+
-						"<div class = 'playORpause_holder'><img class = 'playORpause' onclick='NB_vid.yt.playORpause();' src='http://web.mit.edu/changc/www/videoAnnotation/images/play.png'></div>"+
-						"<div class = 'playback'><img class = 'playback' onclick='NB_vid.yt.playback()' src='http://web.mit.edu/changc/www/videoAnnotation/images/refresh.png'></div>"+
+						"<div class = 'playORpause_holder'><img class = 'playORpause' src='http://web.mit.edu/changc/www/videoAnnotation/images/pause.png'></div>"+
+						"<div class = 'playback'><img class = 'playback' src='http://web.mit.edu/changc/www/videoAnnotation/images/refresh.png'></div>"+
 						"<div class = 'progressbar_container'>"+
 							"<div id= 'dragRangeContainer'>"+
 								"<div id='rangeTick'>"+
@@ -347,7 +347,7 @@
 								"<div id = 'docview_scrollbar_total'>--:--</div>"+ //docview_scrollbar_total = videoTotalTimeDisplay
 							"</div>"+
 						"</div>"+
-						"<div class = 'muteORunmute_holder'><img class = 'muteORunmute' onclick='NB_vid.yt.muteORunmute()' src = ' http://web.mit.edu/changc/www/videoAnnotation/images/volume_up.png'></div>"+
+						"<div class = 'muteORunmute_holder'><img class = 'muteORunmute' src = ' http://web.mit.edu/changc/www/videoAnnotation/images/volume_up.png'></div>"+
 					"</div>"+
 
 
@@ -366,7 +366,6 @@
 		$("div.contents", self.element).html(contents);
 		//calculate correct width of progress bar
 		var pbWidth = $(".videoMenu").width() - ($(".playORpause").width() + $(".playback").width() + $(".muteORunmute").width()) - 20;
-		console.log("pbWidth = " + pbWidth);
 		$(".progressbar_container").css({"width": pbWidth});
 		$("#dragRangeContainer").css({"width": pbWidth});
 		$(".tickmark_holder").css({"width": pbWidth});
@@ -396,22 +395,15 @@
 				self._player.pauseVideo();
 				$(".playORpause").attr("src", "http://web.mit.edu/changc/www/videoAnnotation/images/play.png")
 			}
-		})
-
-		// $("#docview_button_play").click(function(evt){
-		// 	var $elt = $(evt.currentTarget);
-		// 	if ($elt.hasClass("paused")){
-		// 		//$elt.removeClass("paused");
-		// 		self._player.playVideo();
-		// 	}
-		// 	else{
-		// 		//$elt.addClass("paused");
-		// 		self._player.pauseVideo();
-		// 	}
-		// 	});
-		// $("#docview_button_pause").click(function(evt){
-		// 	self._player.pauseVideo();
-		// 	});
+		});
+		$(".playback").click(function(evt){
+			var time = self._player.getCurrentTime()
+			if (time > 5){
+				self._player.seekTo(time - 5);
+			}else{
+				self._player.seekTo(0);
+			}				
+		});
 		var $material = $("div.material", self.element).click(function(evt){
 			var numpage = evt.currentTarget.getAttribute("page");
 			$.concierge.trigger({type: "page", value:numpage});
@@ -426,33 +418,31 @@
 		self._player = new YT.Player('youtube_player', {
 				height: ""+self._h,
 				width: ""+self._w,
-			//			videoId: 'JtsyP0tnVRY',
 			videoId: model.get("youtubeinfo", {}).first().key,
 			playerVars: {controls: 0}, 
 			events: {
 				'onReady': function(event){
-				//				var player = event.target;
-				console.log("player onready - creating metronome!");
-				self._metronome = new Metronome(function(){return self._player.getCurrentTime();}, 0, self.T_METRONOME*1000);
-				self._player.playVideo();
-
+					//				var player = event.target;
+					console.log("player onready - creating metronome!");
+					self._metronome = new Metronome(function(){return self._player.getCurrentTime();}, 0, self.T_METRONOME*1000);
+					self._player.playVideo();
 				},
 				'onStateChange': function(event){
-				if (event.data === YT.PlayerState.PLAYING){
-					// TODO: put this at init time once we have the length metadata
-					$("#docview_scrollbar_total").text(pretty_print_time(self._player.getDuration()));
+					if (event.data === YT.PlayerState.PLAYING){
+						// TODO: put this at init time once we have the length metadata
+						$("#docview_scrollbar_total").text(pretty_print_time(self._player.getDuration()));
 
-					self._metronome.play();
-					// $("#docview_button_play").removeClass("paused");
-					$(".playORpause").removeClass("paused");
-					self._ignoremetronome = false;
-				}
-				else{
-					self._ignoremetronome = true;
-					self._metronome.pause();
-					// $("#docview_button_play").addClass("paused");
-					$(".playORpause").addClass("paused");
-				}
+						self._metronome.play();
+						// $("#docview_button_play").removeClass("paused");
+						$(".playORpause").removeClass("paused");
+						self._ignoremetronome = false;
+					}
+					else{
+						self._ignoremetronome = true;
+						self._metronome.pause();
+						// $("#docview_button_play").addClass("paused");
+						$(".playORpause").addClass("paused");
+					}
 				}
 			}
 			});
