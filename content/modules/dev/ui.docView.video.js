@@ -147,16 +147,16 @@
 		break;
 		case "metronome": 
 		if (!self._ignoremetronome){
-		$thumb = $("#docview_scrollbar_thumb");
-		thumbstyle = getComputedStyle($thumb[0]);
-		total_w = $thumb.parent().width() - $thumb.width() - ((parseInt(thumbstyle.getPropertyValue('border-left-width'), 10) || 0) + (parseInt(thumbstyle.getPropertyValue('border-right-width'), 10) || 0) + (parseInt(thumbstyle.getPropertyValue('margin-left-width'), 10) || 0) + (parseInt(thumbstyle.getPropertyValue('margin-right-width'), 10) || 0)); 
-		$thumb.css({left: total_w*evt.value/self._player.getDuration()+"px"});
-				
-		// var thumbNailPlace = total_w*evt.value/self._player.getDuration();
-		// console.log("Test value: "+ thumbNailPlace);
-		// $("#docview_scrollbar_tick").css({left: 150 + "px"});
-				
-		$("#docview_scrollbar_elapsed").text(pretty_print_time(evt.value));
+			// $thumb = $("#docview_scrollbar_thumb");
+			// thumbstyle = getComputedStyle($thumb[0]);
+			// total_w = $thumb.parent().width() - $thumb.width() - ((parseInt(thumbstyle.getPropertyValue('border-left-width'), 10) || 0) + (parseInt(thumbstyle.getPropertyValue('border-right-width'), 10) || 0) + (parseInt(thumbstyle.getPropertyValue('margin-left-width'), 10) || 0) + (parseInt(thumbstyle.getPropertyValue('margin-right-width'), 10) || 0)); 
+			// $thumb.css({left: total_w*evt.value/self._player.getDuration()+"px"});
+					
+			// var thumbNailPlace = total_w*evt.value/self._player.getDuration();
+			// console.log("Test value: "+ thumbNailPlace);
+			// $("#docview_scrollbar_tick").css({left: 150 + "px"});
+			$("#progressbar_filler").css({width: evt.value/self._player.getDuration()*$("#progressbar").width()+"px"}); ///****
+			$("#docview_scrollbar_elapsed").text(pretty_print_time(evt.value));
 		}
 		break;
 		}
@@ -417,7 +417,7 @@
 		})
 		$("#progressbar").click(function(evt){
 			var percentage = evt.offsetX/$("#progressbar").width();  
-			$("#progressbar_filler").css("width", percentage*100 + "%"); //updates progressbar location
+			$("#progressbar_filler").css("width", percentage*$("#progressbar").width()); //updates progressbar location
 			var currentSec = percentage*self._player.getDuration();
 
 			//updates ytplayer location in video
