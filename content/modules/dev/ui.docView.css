@@ -120,7 +120,8 @@ License:  Copyright (c) 2010-2012 Massachusetts Institute of Technology.
     height: 100%;
 }
 
-#videoTimeDisplay, #videoTotalTimeDisplay{
+/*#videoTimeDisplay, #videoTotalTimeDisplay{*/
+#docview_scrollbar_total, #docview_scrollbar_elapsed{
     display: inline-block;
 }
 

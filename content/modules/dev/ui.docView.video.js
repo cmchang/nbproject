@@ -228,7 +228,7 @@
 			
 			var createTicks = function(payload){
 				var newNoteObj; 
-				//console.log("here");
+				console.log("here");
 				for (var id in payload.diff){
 					newNoteObj = payload.diff[id];
 					//console.log("newNoteObj: ", newNoteObj);
@@ -343,8 +343,8 @@
 							"<div class = 'tickmark_holder'></div>"+	
 
 							"<div id ='showTime'>"+
-								"<div id = 'videoTimeDisplay'>--:--</div><text> /</text>"+
-								"<div id = 'videoTotalTimeDisplay'>--:--</div>"+
+								"<div id = 'docview_scrollbar_elapsed'>00:00</div><text> /</text>"+ //docview_scrollbar_elapsed = videoTimeDisplay in prototype
+								"<div id = 'docview_scrollbar_total'>--:--</div>"+ //docview_scrollbar_total = videoTotalTimeDisplay
 							"</div>"+
 						"</div>"+
 						"<div class = 'muteORunmute_holder'><img class = 'muteORunmute' onclick='NB_vid.yt.muteORunmute()' src = ' http://web.mit.edu/changc/www/videoAnnotation/images/volume_up.png'></div>"+
@@ -359,9 +359,9 @@
 					"</div>"+
 					"<div id='docview_scrollbar_thumb'/></div>"+
 					"<div id='docview_controls'>"+
-						"<button id='docview_button_sb'/>"+
-						"<button id='docview_button_play'/>"+
-						"<button id='docview_button_sf'/>"+
+						// "<button id='docview_button_sb'/>"+
+						// "<button id='docview_button_play'/>"+
+						// "<button id='docview_button_sf'/>"+
 					"</div>";
 		$("div.contents", self.element).html(contents);
 		//calculate correct width of progress bar
@@ -382,20 +382,36 @@
 							 drag: function(evt, ui) { drag_helper(ui.helper, ui.position.left, false);}
 			});
 		$("#docview_drawingarea").drawable({model: model});
-		$("#docview_button_play").click(function(evt){
+		// called when the play/pause button is clicked
+		// syncs the correct image with the action
+
+		$(".playORpause").click(function(evt){
 			var $elt = $(evt.currentTarget);
 			if ($elt.hasClass("paused")){
-				//$elt.removeClass("paused");
 				self._player.playVideo();
+				$(".playORpause").attr("src", "http://web.mit.edu/changc/www/videoAnnotation/images/pause.png")
 			}
 			else{
 				//$elt.addClass("paused");
 				self._player.pauseVideo();
+				$(".playORpause").attr("src", "http://web.mit.edu/changc/www/videoAnnotation/images/play.png")
 			}
-			});
-		$("#docview_button_pause").click(function(evt){
-			self._player.pauseVideo();
-			});
+		})
+
+		// $("#docview_button_play").click(function(evt){
+		// 	var $elt = $(evt.currentTarget);
+		// 	if ($elt.hasClass("paused")){
+		// 		//$elt.removeClass("paused");
+		// 		self._player.playVideo();
+		// 	}
+		// 	else{
+		// 		//$elt.addClass("paused");
+		// 		self._player.pauseVideo();
+		// 	}
+		// 	});
+		// $("#docview_button_pause").click(function(evt){
+		// 	self._player.pauseVideo();
+		// 	});
 		var $material = $("div.material", self.element).click(function(evt){
 			var numpage = evt.currentTarget.getAttribute("page");
 			$.concierge.trigger({type: "page", value:numpage});
@@ -427,13 +443,15 @@
 					$("#docview_scrollbar_total").text(pretty_print_time(self._player.getDuration()));
 
 					self._metronome.play();
-					$("#docview_button_play").removeClass("paused");
+					// $("#docview_button_play").removeClass("paused");
+					$(".playORpause").removeClass("paused");
 					self._ignoremetronome = false;
 				}
 				else{
 					self._ignoremetronome = true;
 					self._metronome.pause();
-					$("#docview_button_play").addClass("paused");
+					// $("#docview_button_play").addClass("paused");
+					$(".playORpause").addClass("paused");
 				}
 				}
 			}
