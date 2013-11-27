@@ -236,26 +236,29 @@
 			
 			var createTicks = function(payload){
 				var newNoteObj; 
-				console.log("here");
+				//console.log("here");
 				for (var id in payload.diff){
 					newNoteObj = payload.diff[id];
 					//console.log("newNoteObj: ", newNoteObj);
 					//calculate the placement of the tickmark
 					var $thumb = $("#docview_scrollbar_thumb");
 					var thumbstyle = getComputedStyle($thumb[0]);
-					var total_w = $thumb.parent().width() - $thumb.width() - ((parseInt(thumbstyle.getPropertyValue('border-left-width'), 10) || 0) + (parseInt(thumbstyle.getPropertyValue('border-right-width'), 10) || 0) + (parseInt(thumbstyle.getPropertyValue('margin-left-width'), 10) || 0) + (parseInt(thumbstyle.getPropertyValue('margin-right-width'), 10) || 0));
+					//var total_w = $thumb.parent().width();
 					//calculate
 					//var self = this;
-					var duration = self._player.getDuration()*100;
-					var thumbPlace = total_w*newNoteObj.page/duration+"px";
-					console.log("duration = "+ duration+ ", newNoteObj.page= "+newNoteObj.page+", thumbplace = " + thumbPlace)
+					// var duration = self._player.getDuration()*100;
+					var duration =  260.969*100; //temporary value to replace self._player.getDuration
+					var thumbPlace = $("#progressbar").width()*newNoteObj.page/duration+"px";
+					console.log("duration = "+ duration+ ", total_W" + $("#progressbar").width() + ", newNoteObj.page= "+newNoteObj.page+", thumbplace = " + thumbPlace)
 					//copy the htmlText - stores the current tick mark divs (if any)
 					var htmlText = $("#docview_scrollbar_tickholder").html();
 					//clear the content in the tickholder div
 					$("#docview_scrollbar_tickholder").html("");
+					$(".tickmark_holder").html("");
 					//get the html of the new tick mark as a string then insert it (bc .append was buggy)
 					htmlText += "<div id='docview_scrollbar_tick' style='left: "+thumbPlace+"' />";
 					$("#docview_scrollbar_tickholder").html(htmlText);
+					$(".tickmark_holder").html(htmlText);
 				}
 		};
 
@@ -360,11 +363,11 @@
 					"</div>"+
 
 
-					"<div id='docview_scrollbar' style = 'display:none'>"+
-						"<div id='docview_scrollbar_list' style = 'display:none'>"+
-							"<div id='docview_scrollbar_tickholder' style = 'display:none'></div>"+
+					"<div id='docview_scrollbar'>"+ //style = 'display:none'
+ 						"<div id='docview_scrollbar_list'>"+
+							"<div id='docview_scrollbar_tickholder'></div>"+
 					"</div>"+
-					"<div id='docview_scrollbar_thumb' style = 'display:none'/></div>";
+					"<div id='docview_scrollbar_thumb'/></div>";
 		$("div.contents", self.element).html(contents);
 		//calculate correct width of progress bar
 		var pbWidth = $(".videoMenu").width() - ($(".playORpause_holder").width() + $(".playback").width() + $(".muteORunmute_holder").width()) - 10;
@@ -419,6 +422,7 @@
 			var percentage = evt.offsetX/$("#progressbar").width();  
 			$("#progressbar_filler").css("width", percentage*$("#progressbar").width()); //updates progressbar location
 			var currentSec = percentage*self._player.getDuration();
+			console.log(self._player.getDuration())
 
 			//updates ytplayer location in video
 			self._player.seekTo(currentSec);  //Todo: bug I think because the corresponding highlighted comment isn't updated

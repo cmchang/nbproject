@@ -104,6 +104,7 @@ License:  Copyright (c) 2010-2012 Massachusetts Institute of Technology.
     border: solid 1px #B5AF9F;
     border-bottom-right-radius: 5px;
     border-bottom-left-radius: 5px;
+    overflow: hidden;
 
 }
 
