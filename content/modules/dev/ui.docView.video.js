@@ -122,7 +122,7 @@
 		$thumb = $("#progressbar_filler");
 		thumbstyle = getComputedStyle($thumb[0]);
 		total_w = $thumb.parent().width() - $thumb.width() - ((parseInt(thumbstyle.getPropertyValue('border-left-width'), 10) || 0) + (parseInt(thumbstyle.getPropertyValue('border-right-width'), 10) || 0) + (parseInt(thumbstyle.getPropertyValue('margin-left-width'), 10) || 0) + (parseInt(thumbstyle.getPropertyValue('margin-right-width'), 10) || 0)); 
-		$("#docview_scrollbar_thumb").css({left: total_w*self._page/(self._player.getDuration()*self.SEC_MULT_FACTOR)+"px"});
+		//$("#docview_scrollbar_thumb").css({left: total_w*self._page/(self._player.getDuration()*self.SEC_MULT_FACTOR)+"px"});
 		$("#progressbar_filler").css({width: total_w*self._page/(self._player.getDuration()*self.SEC_MULT_FACTOR)+"px"});
 		break;
 		case "doc_scroll_down": 
@@ -241,22 +241,22 @@
 					newNoteObj = payload.diff[id];
 					//console.log("newNoteObj: ", newNoteObj);
 					//calculate the placement of the tickmark
-					var $thumb = $("#docview_scrollbar_thumb");
-					var thumbstyle = getComputedStyle($thumb[0]);
+					// var $thumb = $("#docview_scrollbar_thumb");
+					// var thumbstyle = getComputedStyle($thumb[0]);
 					//var total_w = $thumb.parent().width();
 					//calculate
 					//var self = this;
-					// var duration = self._player.getDuration()*100;
-					var duration =  260.969*100; //temporary value to replace self._player.getDuration
-					var thumbPlace = $("#progressbar").width()*newNoteObj.page/duration+"px";
-					console.log("duration = "+ duration+ ", total_W" + $("#progressbar").width() + ", newNoteObj.page= "+newNoteObj.page+", thumbplace = " + thumbPlace)
+					var duration = self._player.getDuration()*100;
+					// var duration =  260.969*100; //temporary value to replace self._player.getDuration
+					var tickPlace = $("#progressbar").width()*newNoteObj.page/duration+"px";
+					console.log("duration = "+ duration+ ", total_W" + $("#progressbar").width() + ", newNoteObj.page= "+newNoteObj.page+", tickPlace = " + tickPlace)
 					//copy the htmlText - stores the current tick mark divs (if any)
 					var htmlText = $("#docview_scrollbar_tickholder").html();
 					//clear the content in the tickholder div
 					$("#docview_scrollbar_tickholder").html("");
 					$(".tickmark_holder").html("");
 					//get the html of the new tick mark as a string then insert it (bc .append was buggy)
-					htmlText += "<div id='docview_scrollbar_tick' style='left: "+thumbPlace+"' />";
+					htmlText += "<div id='docview_scrollbar_tick' style='left: "+tickPlace+"' />";
 					$("#docview_scrollbar_tickholder").html(htmlText);
 					$(".tickmark_holder").html(htmlText);
 				}
@@ -271,7 +271,7 @@
 				this._render();
 				var autoProgress = $.Deferred();
 				var f_poll = function(){
-					if ("getDuration" in self._player){
+					if ("getDuration" in self._player && self._player.getDuration() != 0){
 						autoProgress.resolve();
 					}
 					else{
@@ -366,8 +366,7 @@
 					"<div id='docview_scrollbar'>"+ //style = 'display:none'
  						"<div id='docview_scrollbar_list'>"+
 							"<div id='docview_scrollbar_tickholder'></div>"+
-					"</div>"+
-					"<div id='docview_scrollbar_thumb'/></div>";
+					"</div>";
 		$("div.contents", self.element).html(contents);
 		//calculate correct width of progress bar
 		var pbWidth = $(".videoMenu").width() - ($(".playORpause_holder").width() + $(".playback").width() + $(".muteORunmute_holder").width()) - 10;
