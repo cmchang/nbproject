@@ -154,6 +154,7 @@
                     window.clearTimeout(timeout_save_button);
                     self.element.trigger("before_cleanup", true);
                     self.element.trigger("minimize");
+                    $.concierge.trigger({type: "before_cleanup", value: true});
                     self.element.empty();
                     model.remove("draft", id_item);
                     if (self._sel){

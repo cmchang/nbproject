@@ -113,6 +113,7 @@ License:  Copyright (c) 2010-2012 Massachusetts Institute of Technology.
     height: 100%;
     background: red;
     opacity: .4;
+    width: 1px;
 }
 
 #showTime{
@@ -258,16 +259,6 @@ height: 100%;
     background-position: 0px -20px;
 }
 
-#docview_button_sb{
-    background-position: -160px -20px;
-}
-
-#docview_button_sf{
-    background-position: -120px -20px;
-}
-#docview_button_stop{
-    background-position: -80px -20px;
-}
 
 #docview_scrollbar{
 position: relative; 
@@ -287,7 +278,7 @@ background-color: #000000;
 overflow: hidden;
 }
 
-#docview_scrollbar_tickholder{
+/*#docview_scrollbar_tickholder{
     width: 100%;
     height: 100%;
     position: relative;
@@ -312,7 +303,7 @@ border-radius: 3px;
 background-color: #a0a0a0;
 border: thin solid #707070;
 /*left: 0px;*/
-}
+}*/
 
 #docview_scrollbar_elapsed{
 color: #909090;

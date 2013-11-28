@@ -109,6 +109,14 @@
 		$("div.global-editors", this.element).append($editor);
 		$editor.editor();
 		break;
+		case "editor_saving":
+		$("#rangeTick").css({"display":"none"});
+		break;
+		case "before_cleanup": //save or cancel in editor
+		//console.log("close")
+		//TODO: this is not recognized as a triggered event yet
+		$("#rangeTick").css({"display":"none"});
+		break;
 		case "select_thread": 
 		var o = model.o.location[evt.value];
 		self._id_location = evt.value;
@@ -118,11 +126,9 @@
 			self._player.seekTo(self._page/self.SEC_MULT_FACTOR);
 		}
 		self._render();
-		// $thumb = $("#docview_scrollbar_thumb");
 		$thumb = $("#progressbar_filler");
 		thumbstyle = getComputedStyle($thumb[0]);
 		total_w = $thumb.parent().width() - $thumb.width() - ((parseInt(thumbstyle.getPropertyValue('border-left-width'), 10) || 0) + (parseInt(thumbstyle.getPropertyValue('border-right-width'), 10) || 0) + (parseInt(thumbstyle.getPropertyValue('margin-left-width'), 10) || 0) + (parseInt(thumbstyle.getPropertyValue('margin-right-width'), 10) || 0)); 
-		//$("#docview_scrollbar_thumb").css({left: total_w*self._page/(self._player.getDuration()*self.SEC_MULT_FACTOR)+"px"});
 		$("#progressbar_filler").css({width: total_w*self._page/(self._player.getDuration()*self.SEC_MULT_FACTOR)+"px"});
 		break;
 		case "doc_scroll_down": 
@@ -147,14 +153,6 @@
 		break;
 		case "metronome": 
 		if (!self._ignoremetronome){
-			// $thumb = $("#docview_scrollbar_thumb");
-			// thumbstyle = getComputedStyle($thumb[0]);
-			// total_w = $thumb.parent().width() - $thumb.width() - ((parseInt(thumbstyle.getPropertyValue('border-left-width'), 10) || 0) + (parseInt(thumbstyle.getPropertyValue('border-right-width'), 10) || 0) + (parseInt(thumbstyle.getPropertyValue('margin-left-width'), 10) || 0) + (parseInt(thumbstyle.getPropertyValue('margin-right-width'), 10) || 0)); 
-			// $thumb.css({left: total_w*evt.value/self._player.getDuration()+"px"});
-					
-			// var thumbNailPlace = total_w*evt.value/self._player.getDuration();
-			// console.log("Test value: "+ thumbNailPlace);
-			// $("#docview_scrollbar_tick").css({left: 150 + "px"});
 			$("#progressbar_filler").css({width: evt.value/self._player.getDuration()*$("#progressbar").width()+"px"}); ///****
 			$("#docview_scrollbar_elapsed").text(pretty_print_time(evt.value));
 		}
@@ -239,25 +237,14 @@
 				//console.log("here");
 				for (var id in payload.diff){
 					newNoteObj = payload.diff[id];
-					//console.log("newNoteObj: ", newNoteObj);
-					//calculate the placement of the tickmark
-					// var $thumb = $("#docview_scrollbar_thumb");
-					// var thumbstyle = getComputedStyle($thumb[0]);
-					//var total_w = $thumb.parent().width();
-					//calculate
-					//var self = this;
 					var duration = self._player.getDuration()*100;
-					// var duration =  260.969*100; //temporary value to replace self._player.getDuration
 					var tickPlace = $("#progressbar").width()*newNoteObj.page/duration+"px";
-					console.log("duration = "+ duration+ ", total_W" + $("#progressbar").width() + ", newNoteObj.page= "+newNoteObj.page+", tickPlace = " + tickPlace)
 					//copy the htmlText - stores the current tick mark divs (if any)
-					var htmlText = $("#docview_scrollbar_tickholder").html();
+					var htmlText = $(".tickmark_holder").html();
 					//clear the content in the tickholder div
-					$("#docview_scrollbar_tickholder").html("");
 					$(".tickmark_holder").html("");
 					//get the html of the new tick mark as a string then insert it (bc .append was buggy)
-					htmlText += "<div id='docview_scrollbar_tick' style='left: "+tickPlace+"' />";
-					$("#docview_scrollbar_tickholder").html(htmlText);
+					htmlText += "<div class = 'tickmark' style='left: "+tickPlace+"' />";
 					$(".tickmark_holder").html(htmlText);
 				}
 		};
@@ -359,13 +346,7 @@
 								"<div id = 'docview_scrollbar_total'>--:--</div>"+ //docview_scrollbar_total = videoTotalTimeDisplay
 							"</div>"+
 						"</div>"+
-						"<div class = 'muteORunmute_holder'><img class = 'muteORunmute' src = ' http://web.mit.edu/changc/www/videoAnnotation/images/volume_up.png'></div>"+
-					"</div>"+
-
-
-					"<div id='docview_scrollbar'>"+ //style = 'display:none'
- 						"<div id='docview_scrollbar_list'>"+
-							"<div id='docview_scrollbar_tickholder'></div>"+
+						"<div class = 'muteORunmute_holder'><img class = 'muteORunmute' src = 'http://web.mit.edu/changc/www/videoAnnotation/images/volume_up.png'></div>"+
 					"</div>";
 		$("div.contents", self.element).html(contents);
 		//calculate correct width of progress bar
@@ -379,11 +360,7 @@
 			var total_w = $thumb.parent().width() - $thumb.width() - ((parseInt(thumbstyle.getPropertyValue('border-left-width'), 10) || 0) + (parseInt(thumbstyle.getPropertyValue('border-right-width'), 10) || 0) + (parseInt(thumbstyle.getPropertyValue('margin-left-width'), 10) || 0) + (parseInt(thumbstyle.getPropertyValue('margin-right-width'), 10) || 0)); 
 			self._player.seekTo(duration * (pos+0.0) / total_w, make_new_req);
 		};
-		// $("#docview_scrollbar_thumb").draggable({axis: "x",
-		// 					 containment: "parent", 
-		// 					 stop: function(evt, ui) { drag_helper(ui.helper, ui.position.left, true);}, 
-		// 					 drag: function(evt, ui) { drag_helper(ui.helper, ui.position.left, false);}
-		// 	});
+
 		$("#docview_drawingarea").drawable({model: model});
 		// called when the play/pause button is clicked
 		// syncs the correct image with the action
@@ -395,7 +372,7 @@
 				$(".playORpause").attr("src", "http://web.mit.edu/changc/www/videoAnnotation/images/pause.png")
 			}
 			else{
-				//$elt.addClass("paused");
+				$elt.addClass("paused");
 				self._player.pauseVideo();
 				$(".playORpause").attr("src", "http://web.mit.edu/changc/www/videoAnnotation/images/play.png")
 			}
@@ -408,7 +385,7 @@
 				self._player.seekTo(0);
 			}				
 		});
-		$(".muteORunmute").click(function(evt){
+		$(".muteORunmute_holder").click(function(evt){
 			if ($(".muteORunmute").attr("src") == "http://web.mit.edu/changc/www/videoAnnotation/images/volume_up.png"){
 				$(".muteORunmute").attr("src", "http://web.mit.edu/changc/www/videoAnnotation/images/mute.png")
 				self._player.mute();
@@ -421,8 +398,6 @@
 			var percentage = evt.offsetX/$("#progressbar").width();  
 			$("#progressbar_filler").css("width", percentage*$("#progressbar").width()); //updates progressbar location
 			var currentSec = percentage*self._player.getDuration();
-			console.log(self._player.getDuration())
-
 			//updates ytplayer location in video
 			self._player.seekTo(currentSec);  //Todo: bug I think because the corresponding highlighted comment isn't updated
 		})
