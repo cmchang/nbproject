@@ -21,16 +21,6 @@
 	//youtube player seems to only support 16/9 parameters, and fills in with black bands when not the case: 
 	//cf https://developers.google.com/youtube/2.0/reference#youtube_data_api_tag_yt:aspectratio
 	var ASPECT_RATIO = 16.0/9;
-	var pretty_print_time = function(t){
-	var n = Math.floor(t);
-	var n_minutes = Math.floor(n / 60);
-	var n_seconds = n % 60;
-	if (n_seconds <10){
-		n_seconds = "0" + n_seconds;
-	}
-	return n_minutes+":"+n_seconds;
-	};
-
 	var Metronome = function( position_helper, position, refresh_ms){
 	this.position = position || 0; 
 	this.refresh_ms = refresh_ms || 1000;
@@ -155,7 +145,7 @@
 		case "metronome": 
 		if (!self._ignoremetronome){
 			$("#progressbar_filler").css({width: evt.value/self._player.getDuration()*$("#progressbar").width()+"px"}); ///****
-			$("#docview_scrollbar_elapsed").text(pretty_print_time(evt.value));
+			$("#docview_scrollbar_elapsed").text( $.concierge.get_component("pretty_print_time")(evt.value));
 		}
 		break;
 		}
@@ -428,7 +418,7 @@
 				'onStateChange': function(event){
 					if (event.data === YT.PlayerState.PLAYING){
 						// TODO: put this at init time once we have the length metadata
-						$("#docview_scrollbar_total").text(pretty_print_time(self._player.getDuration()));
+						$("#docview_scrollbar_total").text($.concierge.get_component("pretty_print_time")(self._player.getDuration()));
 
 						self._metronome.play();
 						// $("#docview_button_play").removeClass("paused");

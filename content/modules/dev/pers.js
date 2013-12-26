@@ -345,6 +345,16 @@
         }
         return "<div align='center' class='loadingpane'><img src='content/data/icons/gif/loader1.gif'/><div class='loadingpane-msg'>"+msg+"</div></div>";
     }, 
+	pretty_print_time: function(t){
+//        var t = P.t;
+	var n = Math.floor(t);
+	var n_minutes = Math.floor(n / 60);
+	var n_seconds = n % 60;
+	if (n_seconds <10){
+		n_seconds = "0" + n_seconds;
+	}
+	return n_minutes+":"+n_seconds;
+	}, 
     pretty_print_timedelta: function(P,cb){
         var d = new Date(P.t);
         var now = new Date();
