@@ -1,7 +1,7 @@
 /* docView Plugin 
  * Depends:
  *	ui.core.js
- *	 ui.view.js
+ *	ui.view.js
  *
 
  Author 
@@ -127,9 +127,10 @@
 		}
 		self._render();
 		$thumb = $("#progressbar_filler");
-		thumbstyle = getComputedStyle($thumb[0]);
-		total_w = $thumb.parent().width() - $thumb.width() - ((parseInt(thumbstyle.getPropertyValue('border-left-width'), 10) || 0) + (parseInt(thumbstyle.getPropertyValue('border-right-width'), 10) || 0) + (parseInt(thumbstyle.getPropertyValue('margin-left-width'), 10) || 0) + (parseInt(thumbstyle.getPropertyValue('margin-right-width'), 10) || 0)); 
-		$("#progressbar_filler").css({width: total_w*self._page/(self._player.getDuration()*self.SEC_MULT_FACTOR)+"px"});
+		// thumbstyle = getComputedStyle($thumb[0]);
+		// total_w = $thumb.parent().width() - $thumb.width() - ((parseInt(thumbstyle.getPropertyValue('border-left-width'), 10) || 0) + (parseInt(thumbstyle.getPropertyValue('border-right-width'), 10) || 0) + (parseInt(thumbstyle.getPropertyValue('margin-left-width'), 10) || 0) + (parseInt(thumbstyle.getPropertyValue('margin-right-width'), 10) || 0)); 
+		// $thumb.css({width: total_w*self._page/(self._player.getDuration()*self.SEC_MULT_FACTOR)+"px"});
+		$("#progressbar_filler").css({width: self._page/(self.SEC_MULT_FACTOR*self._player.getDuration())*$("#progressbar").width()+"px"});
 		break;
 		case "doc_scroll_down": 
 		$.L("[docView11] TODO: doc_scroll_down");		
@@ -258,7 +259,7 @@
 				this._render();
 				var autoProgress = $.Deferred();
 				var f_poll = function(){
-					if ("getDuration" in self._player && self._player.getDuration() != 0){
+					if ("getDuration" in self._player && self._player.getDuration() !== 0){
 						autoProgress.resolve();
 					}
 					else{
@@ -289,7 +290,7 @@
 		$.ui.view.prototype._update.call(this);
 		var self = this;
 		/*
-		 //TODO: If we just do this, we loose the place we were at in the video
+        //TODO: If we just do this, we loose the place we were at in the video
 		self._generate_contents();
 		self._render();		
 		*/
@@ -312,8 +313,8 @@
 		var model	= this._model;
 		var file	= model.o.file[id_source];
 		$.concierge.trigger({type: "scale", value: self._scale}); 
-		self._w	 = this.element.width()-2; //remove 2px to account for border of "material" div 
-		self._h	 = self._w/ASPECT_RATIO;
+            self._w = this.element.width()-2; //remove 2px to account for border of "material" div 
+		self._h= self._w/ASPECT_RATIO;
 		var w		= self._w;
 		var h		= self._h;
 		var style	= "width: "+w+"px;height: "+h+"px";
@@ -369,16 +370,16 @@
 			var $elt = $(evt.currentTarget);
 			if ($elt.hasClass("paused")){
 				self._player.playVideo();
-				$(".playORpause").attr("src", "http://web.mit.edu/changc/www/videoAnnotation/images/pause.png")
-			}
+				$(".playORpause").attr("src", "http://web.mit.edu/changc/www/videoAnnotation/images/pause.png");
+            }
 			else{
 				$elt.addClass("paused");
 				self._player.pauseVideo();
-				$(".playORpause").attr("src", "http://web.mit.edu/changc/www/videoAnnotation/images/play.png")
+				$(".playORpause").attr("src", "http://web.mit.edu/changc/www/videoAnnotation/images/play.png");
 			}
 		});
 		$(".playback").click(function(evt){
-			var time = self._player.getCurrentTime()
+			var time = self._player.getCurrentTime();
 			if (time > 5){
 				self._player.seekTo(time - 5);
 			}else{
@@ -386,21 +387,21 @@
 			}				
 		});
 		$(".muteORunmute_holder").click(function(evt){
-			if ($(".muteORunmute").attr("src") == "http://web.mit.edu/changc/www/videoAnnotation/images/volume_up.png"){
-				$(".muteORunmute").attr("src", "http://web.mit.edu/changc/www/videoAnnotation/images/mute.png")
+			if ($(".muteORunmute").attr("src") === "http://web.mit.edu/changc/www/videoAnnotation/images/volume_up.png"){
+				$(".muteORunmute").attr("src", "http://web.mit.edu/changc/www/videoAnnotation/images/mute.png");
 				self._player.mute();
 			}else{
-				$(".muteORunmute").attr("src", "http://web.mit.edu/changc/www/videoAnnotation/images/volume_up.png")
+				$(".muteORunmute").attr("src", "http://web.mit.edu/changc/www/videoAnnotation/images/volume_up.png");
 				self._player.unMute();
 			}
-		})
+		});
 		$("#progressbar").click(function(evt){
 			var percentage = evt.offsetX/$("#progressbar").width();  
 			$("#progressbar_filler").css("width", percentage*$("#progressbar").width()); //updates progressbar location
 			var currentSec = percentage*self._player.getDuration();
 			//updates ytplayer location in video
 			self._player.seekTo(currentSec);  //Todo: bug I think because the corresponding highlighted comment isn't updated
-		})
+		});
 		var $material = $("div.material", self.element).click(function(evt){
 			var numpage = evt.currentTarget.getAttribute("page");
 			$.concierge.trigger({type: "page", value:numpage});
@@ -448,7 +449,7 @@
 		 */
 		$(window).keyup(function(e) {
 			
-			if(e.which == 32){ //spacebar
+			if(e.which === 32){ //spacebar
 				$(".playORpause").trigger("click");
 			}else if(e.which === 77){ // m
 				$(".muteORunmute").trigger("click");
