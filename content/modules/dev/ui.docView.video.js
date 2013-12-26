@@ -511,6 +511,7 @@
 	provides: ["doc"], 
 	listens: {
 		note_hover: null, 
+		before_cleanup: null,
 		note_out: null, 
 		visibility: null, 
 		global_editor: null, 
