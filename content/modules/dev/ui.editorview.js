@@ -24,6 +24,8 @@
                 var O        = self.options;
                 self._allowStaffOnly = O.allowStaffOnly;
                 self._allowAnonymous = O.allowAnonymous;
+                self.SEC_MULT_FACTOR = $.concierge.get_component("get_sec_mult_factor")();
+
             }, 
             _defaultHandler: function(evt){
                 var self        = this;
@@ -130,6 +132,9 @@
                         }
                     }
                     break;
+                case "timeRange":
+                    console.log("editor got timerange: "+evt.value);
+                    break;
                 }
             },
             _render: function(id_item, suppress_focus){
@@ -165,7 +170,15 @@
                 var signoption    = self._allowAnonymous ? "<span id='signoption' title=\"check to keep this comment anonymous to other students\"><input type='checkbox' id='checkbox_sign' value='anonymous'/><label for='checkbox_sign'>Anonymous to students</label></div>": " ";
                 var questionoption = self._doEdit ? " " : "<span><input type='checkbox' id='checkbox_question' value='question'/><label for='checkbox_question'>Reply Requested</label></span><br/> ";
                 var checkbox_options = questionoption+signoption;
-                var header    = self._inReplyTo ? "Re: "+$.E($.ellipsis(self._note.body, 100)) : "New note...";
+                
+                var header;
+                if (model.o.file[self._file].filetype === FILETYPES.TYPE_YOUTUBE){
+                    //TODO: do not rely on id docview_drawingarea for the time (attribute page)
+                    header = self._inReplyTo ? "Re: "+$.E($.ellipsis(self._note.body, 100)) : "New note - Time: <input id = 'startTime' value = '"+ $.concierge.get_component("pretty_print_time")($('#docview_drawingarea').attr('page')/self.SEC_MULT_FACTOR)+"''></input> To: <input id = 'endTime'></input>";
+                    console.log(self._latestmetronometime);
+                }else{
+                    header = self._inReplyTo ? "Re: "+$.E($.ellipsis(self._note.body, 100)) : "New note...";
+                }
 
                 var contents = $([
                                   "<div class='editor-header'>",header,"</div><div class='notebox'><div class='notebox-body'><div><a class='ui-view-tab-close ui-corner-all ui-view-semiopaque' role='button' href='#'><span class='ui-icon ui-icon-close'></span></a></div><textarea/><br/></div><div class='editor-footer'><table class='editorcontrols'><tr><td class='group'><label for='share_to'>Shared&nbsp;with:&nbsp;</label><select id='share_to' name='vis_", id_item, "'><option value='3'>The entire class</option>", staffoption, 
@@ -329,7 +342,8 @@
             reply_thread: null, 
             edit_thread: null,
             focus_thread: null,
-            discard_if_empty: null
+            discard_if_empty: null, 
+            timeRange: null
         },
         id_source: null, 
         note: null, 

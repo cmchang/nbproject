@@ -504,6 +504,46 @@
 		}
 	});
 	
+	////////////Track mouse location//////////
+	var mouseX = 0;
+	var mouseY = 0;
+	$(document).mousemove(function(e){
+		$('#status').html(e.pageX +', '+ e.pageY);
+		mouseX = e.pageX;
+		mouseY = e.pageY;
+		dragWidthCalc(e);
+	}); 
+
+	////////// Range Tick////////////
+	var drag_mouseup = false;
+	var startDragX = 0;
+	$("#progressbar").mousedown(function(e){
+		startDragX = mouseX;
+		drag_mouseup = false; 
+		console.log("startDragX: ", startDragX);
+	});
+	
+	$(document).mouseup(function(e){
+		if(!drag_mouseup){
+			drag_mouseup = true;
+		}
+	});
+
+	function dragWidthCalc(e){
+		if(startDragX > 0 && !drag_mouseup){
+			console.log("dragging");
+			$("#rangeTick").css({"display":"block"});
+			var tickLoc = startDragX - $("#progressbar").parent().offset();
+			$("rangeTick").css("left", tickLoc);
+			var dragWidth = mouseX - startDragX;
+			var widthStr = dragWidth.toString() + "px";
+			$("#rangeTick").css("width", widthStr);
+		$.concierge.trigger({type: "timeRange", value:{start: 0, end:100}});
+		}
+	}
+
+	////////////////////////
+
 	$.widget("ui.docView",V_OBJ );
 	$.ui.docView.prototype.options = {
 	img_server: "http://localhost", 
